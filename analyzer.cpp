@@ -22,7 +22,7 @@ void TripAnalyzer::ingestFile(const std::string& csvPath) {
     }
 
     string line;
-    getline(file, line); // skip header
+    getline(file, line); // skipping header
 
     while (getline(file, line)) {
         stringstream ssline(line);
@@ -47,8 +47,15 @@ void TripAnalyzer::ingestFile(const std::string& csvPath) {
         else {
             continue; // malformed row
         }
+        
+        if (pickupZoneID.empty()) {
+            continue;
+        }
 
         if (dateAndTime.size() < 13) {
+            continue;
+        }
+        if (dateAndTime.size() < 16 || dateAndTime[13] != ':') {
             continue;
         }
 
@@ -125,3 +132,4 @@ std::vector<SlotCount> TripAnalyzer::topBusySlots(int k) const {
 
     return result;
 }
+
